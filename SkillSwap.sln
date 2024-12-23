@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkillSwapApi", "SkillSwapApi\SkillSwapApi.csproj", "{F5EF3BC5-5C6A-43F0-907B-194092B9A2B2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorSkillSwapWeb", "BlazorSkillSwapWeb\BlazorSkillSwapWeb.csproj", "{437B6D42-5536-4511-8D07-20381ADD0773}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F5EF3BC5-5C6A-43F0-907B-194092B9A2B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F5EF3BC5-5C6A-43F0-907B-194092B9A2B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F5EF3BC5-5C6A-43F0-907B-194092B9A2B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F5EF3BC5-5C6A-43F0-907B-194092B9A2B2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{437B6D42-5536-4511-8D07-20381ADD0773}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{437B6D42-5536-4511-8D07-20381ADD0773}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{437B6D42-5536-4511-8D07-20381ADD0773}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{437B6D42-5536-4511-8D07-20381ADD0773}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

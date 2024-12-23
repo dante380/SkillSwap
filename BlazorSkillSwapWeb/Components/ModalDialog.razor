@@ -1,0 +1,35 @@
+@if (IsVisible)
+{
+    <div class="modal">
+        <div class="modal-content">
+            <span class="close" @onclick="CloseModal">&times;</span>
+            @ChildContent
+        </div>
+    </div>
+}
+else
+{
+    @* Modal is not visible, nothing is rendered *@
+    Console.WriteLine("Modal is not visible");
+}
+
+@code {
+    [Parameter]
+    public bool IsVisible { get; set; }
+
+    [Parameter]
+    public EventCallback<bool> OnClose { get; set; }
+
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    private void CloseModal()
+    {
+        OnClose.InvokeAsync(false);
+    }
+
+    protected override void OnParametersSet()
+    {
+        Console.WriteLine($"Modal visibility: {IsVisible}");
+    }
+}

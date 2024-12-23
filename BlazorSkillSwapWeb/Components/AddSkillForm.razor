@@ -1,0 +1,28 @@
+@inject HttpClient Http
+
+<h3>AddSkillForm</h3>
+<form>
+    <input @bind="name" placeholder="Name" />
+    <input @bind="description" placeholder="Email" />
+    <input @bind="level" placeholder="Password" type="password" />
+
+    <button @onclick="PostSkill">AddSkill</button>
+</form>
+@code {
+    private string name;
+    private string description;
+    private int level;
+
+    private async Task PostSkill()
+    {
+        var skill = new
+        {
+            Id = Guid.NewGuid(),
+            Name = name,
+            Description = description,
+            Level = level
+        };
+
+        var response = await Http.PostAsJsonAsync($"https://localhost:7284/api/Skill/{skill.Id}", skill);
+    }
+}

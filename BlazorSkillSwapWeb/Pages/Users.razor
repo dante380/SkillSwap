@@ -1,0 +1,31 @@
+@page "/Users"
+<h3>Users</h3>
+
+<button @onclick="ShowModal">Add User</button>
+
+<BlazorSkillSwapWeb.Components.ModalDialog IsVisible="isModalVisible" OnClose="HandleModalClose">
+    <BlazorSkillSwapWeb.Components.AddUserForm />
+</BlazorSkillSwapWeb.Components.ModalDialog>
+
+
+
+@code {
+    private bool isModalVisible;
+
+    private async Task ShowModal()
+    {
+        Console.WriteLine("ShowModal called");
+        isModalVisible = true;
+        Console.WriteLine($"isModalVisible: {isModalVisible}");
+        StateHasChanged();
+    }
+
+    private void HandleModalClose(bool isVisible)
+    {
+        isModalVisible = isVisible;
+        StateHasChanged();
+    }
+    
+    
+    
+}

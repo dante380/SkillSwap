@@ -1,0 +1,34 @@
+@inject HttpClient Http
+
+<h3>AddUserForm</h3>
+<form>
+    <input @bind="name" placeholder="Name" />
+    <input @bind="email" placeholder="Email" />
+    <input @bind="password" placeholder="Password" type="password" />
+    <input @bind="role" placeholder="Role" />
+    <input @bind="bio" placeholder="Bio" />
+
+    <button @onclick="PostUser">AddUser</button>
+</form>
+@code {
+    private string name;
+    private string email;
+    private string password;
+    private string role;
+    private string bio;
+
+    private async Task PostUser()
+    {
+        var user = new
+        {
+            Id = Guid.NewGuid(),
+            Name = name,
+            Email = email,
+            Password = password,
+            Role = role,
+            Bio = bio
+        };
+
+        var response = await Http.PostAsJsonAsync($"https://localhost:7284/api/User/{user.Id}", user);
+    }
+}

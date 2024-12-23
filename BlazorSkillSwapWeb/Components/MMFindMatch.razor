@@ -1,0 +1,72 @@
+@using System.Text.Json
+@inject HttpClient Http
+
+<h3>Matchmaking</h3>
+
+<button @onclick="FindMatch">Find Match</button>
+
+@if (isLoading)
+{
+    <p>Searching for a match...</p>
+}
+else if (matchResult != null)
+{
+    @if (matchResult.MatchFound)
+    {
+        <p>Match Found!</p>
+        <p>Player 1: @matchResult.Player1</p>
+        <p>Player 2: @matchResult.Player2</p>
+    }
+    else
+    {
+        <p>No match found. Please try again later.</p>
+    }
+}
+
+@code {
+    private MatchResult? matchResult;
+    private bool isLoading;
+
+    private async Task FindMatch()
+    {
+        try
+        {
+            isLoading = true;
+            matchResult = null;
+
+            var response = await Http.PostAsync("https://localhost:7284/api/MM/findmatch", null);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var json = await response.Content.ReadAsStringAsync();
+                Console.WriteLine($"API Response: {json}"); // Log the raw response for debugging
+
+                matchResult = JsonSerializer.Deserialize<MatchResult>(json, new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
+
+                Console.WriteLine($"MatchFound: {matchResult?.MatchFound}"); // Log the match found state for debugging
+            }
+            else
+            {
+                Console.WriteLine("Error fetching match.");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error: {ex.Message}");
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+
+    private class MatchResult
+    {
+        public bool MatchFound { get; set; }
+        public string? Player1 { get; set; }
+        public string? Player2 { get; set; }
+    }
+}

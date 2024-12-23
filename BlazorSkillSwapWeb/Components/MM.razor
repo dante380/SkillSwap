@@ -1,0 +1,81 @@
+@using Microsoft.AspNetCore.SignalR.Client
+@using Microsoft.AspNetCore.SignalR
+@using Microsoft.Extensions.Options
+@inject HttpClient Http
+
+<h3>MM</h3>
+
+@if (IsCon)
+{
+    <p>Waiting for a match...</p>
+}
+else
+{
+    <p>Searching for a match...</p>
+}
+@if (MatchedPlayer1 != String.Empty && MatchedPlayer2 != String.Empty)
+{
+    <p>Match Found!</p>
+    <p>Player 1: @MatchedPlayer1</p>
+    <p>Player 2: @MatchedPlayer2</p>
+}
+
+<button @onclick="JoinMM" disabled="@IsSearching">Join Matchmaking</button>
+
+<input @bind="PlrID"/>
+<input @bind="MatchedPlayer2"/>
+
+@code {
+    private HubConnection? _hubConnection;
+    private bool IsCon = false;
+    private string? MatchedPlayer1;
+    private string? MatchedPlayer2;
+    private bool IsSearching = false;
+    private string? PlrID;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _hubConnection = new HubConnectionBuilder()
+            .WithUrl("https://localhost:7284/mmhub", options =>
+            {
+                options.Headers.Add("Access-Control-Allow-Origin", "https://localhost:5284");
+                options.Headers.Add("Access-Control-Allow-Credentials", "true");
+            })
+            .WithAutomaticReconnect()
+            .Build();
+
+        _hubConnection.On<string, string>("FindMatch", (player1, player2) =>
+        {
+            IsCon = true;
+            MatchedPlayer1 = player1;
+            MatchedPlayer2 = player2;
+            IsSearching = false;
+            StateHasChanged();
+        });
+
+        await _hubConnection.StartAsync();
+    }
+
+    private async Task JoinMM()
+    {
+        IsSearching = true;
+
+        try
+        {
+            await _hubConnection.InvokeAsync("JoinQueue", (string)PlrID);
+        }
+        catch (HubException ex)
+        {
+            Console.WriteLine($"Error: {ex.Message}");
+        }
+    }
+
+    private async Task DisposeAsync()
+    {
+        if (_hubConnection is not null)
+        {
+            await _hubConnection.DisposeAsync();
+        }
+    }
+}
+}

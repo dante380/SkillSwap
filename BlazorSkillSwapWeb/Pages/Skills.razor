@@ -1,0 +1,44 @@
+@inject HttpClient Http
+@page "/Skills"
+<h3>Skills</h3>
+
+<button @onclick="ShowModal">Add Skill</button>
+
+<BlazorSkillSwapWeb.Components.ModalDialog IsVisible="isModalVisible" OnClose="HandleModalClose">
+    <BlazorSkillSwapWeb.Components.AddSkillForm />
+</BlazorSkillSwapWeb.Components.ModalDialog>
+
+<!--<BlazorSkillSwapWeb.Components.CustomeTable TItem="Skill" TableData="@_skills"/>-->
+
+
+@code {
+    private bool isModalVisible;
+    private Skill[]? _skills;
+
+    private async Task ShowModal()
+    {
+        Console.WriteLine("ShowModal called");
+        isModalVisible = true;
+        Console.WriteLine($"isModalVisible: {isModalVisible}");
+        StateHasChanged();
+    }
+
+    private void HandleModalClose(bool isVisible)
+    {
+        isModalVisible = isVisible;
+        StateHasChanged();
+    }
+    
+    protected override async Task OnInitializedAsync()
+    {
+        _skills = await Http.GetFromJsonAsync<Skill[]>("https://localhost:7284/api/Skill");
+    }
+    
+    public class Skill
+    {
+        public Guid Id { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public int Level { get; set; }
+    }
+}
